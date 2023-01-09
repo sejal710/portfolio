@@ -8,21 +8,26 @@ import {
   Stack,
   Button,
   Link,
-  Badge,
+  Grid,
   useColorModeValue,
+  Flex,
 } from '@chakra-ui/react';
 import { Inter } from '@next/font/google'
 import styles from '../styles/Home.module.css'
-import axios from 'axios'
-const inter = Inter({ subsets: ['latin'] })
+import {RxDotFilled} from 'react-icons/rx'
+import {FcFile} from 'react-icons/fc'
 
-export default function Home() {
-  const getGithubUser = async() => {
-    const resp = await axios.get(`https://api.github.com/users/sejal710`);
-    const user = await resp.json();
-    return user;
-  }
-  console.log(getGithubUser())
+export default function Home({github}) {
+  // const {
+  //   html_url,
+  // //   name,
+  //   description,
+  //   stargazers_count,
+  //   forks_count,
+  //   language,
+  // } = github.items
+  // console.log(github.items)
+  github.items.map((el) => console.log(el))
   return (
     <>
       <Head>
@@ -31,14 +36,56 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <SocialProfileSimple />
-     
+      <main>
+        <Flex gap='10px' justifyContent={'space-between'}>
+          <Box>
+             <Box>
+              <SocialProfileSimple />
+             </Box>
+             <Box  maxW={'320px'}
+        w={'full'}
+        bg={useColorModeValue('white', 'gray.900')}
+        boxShadow={'2xl'}
+        rounded={'lg'}
+        p={6}
+        textAlign={'center'}>
+                <Text textAlign={'center'}
+          color={useColorModeValue('gray.700', 'gray.400')}
+          px={3} >
+            Full-stack Developer | JavaScript | Typescript | NodeJS | ReactJS | HTML | CSS | Chakra-UI
+          </Text>
+             </Box>
+          </Box>
+          <Box w={'100%'}>
+       <Grid m={'auto'}>
+        <Box margin={'auto'}>
+          <a href={`https://github.com/sejal710?tab=repositories`}>
+             <Text fontSize={'40px'} fontWeight='10px'>Project</Text>
+          </a>
+        </Box>
+        <Box>
+          <Grid gridTemplateColumns={'repeat(3,1fr)'} gap='15px'>
+            {github.items.map((item, index) => <Project key={index} {...item} />)}
+          </Grid>
+        </Box>
+      </Grid>
+          </Box>
+        </Flex>
+       
+
       </main>
     </>
   )
 }
-
+export async function getServerSideProps(){
+  let res = await fetch(`https://api.github.com/search/repositories?q=user:sejal710+fork:true&sort=updated&per_page=8&type=Repositories`)
+  let data = await res.json()
+  return {
+    props : {
+      github :data
+    } // will be passed to the page component as props
+  }
+}
 function SocialProfileSimple() {
   return (
     <Center py={6}>
@@ -92,7 +139,10 @@ function SocialProfileSimple() {
             _focus={{
               bg: 'gray.200',
             }}>
-            Resume
+              <a href='https://drive.google.com/file/d/1cGcCIxgaPzXIjRjcu09ZErU98GUzQK7f/view?usp=share_link'>
+                Resume
+              </a>
+            
           </Button>
           <Button
             flex={1}
@@ -109,7 +159,8 @@ function SocialProfileSimple() {
             _focus={{
               bg: 'blue.500',
             }}>
-            Follow
+              <a href='https://github.com/sejal710'>Follow</a>
+            
           </Button>
         </Stack>
       </Box>
@@ -117,4 +168,40 @@ function SocialProfileSimple() {
   );
 }
 
-
+function Project ({
+  html_url,
+  name,
+  description,
+  stargazers_count,
+  forks_count,
+  language,
+}){
+  return (
+    <a href={html_url}>
+       <Box  maxW={'320px'}
+        w={'full'}
+        bg={useColorModeValue('white', 'gray.900')}
+        boxShadow={'2xl'}
+        rounded={'lg'}
+        p={6}>
+          <Grid gap='9px'>
+            <Box>
+              <Flex>
+                <Text fontSize={'20px'} fontWeight='15px' display={'flex'} gap='10px' justifyContent={'center'}
+                alignItems='center'>
+                  <span><FcFile /></span> {name}</Text></Flex>
+            </Box>
+            <Box>
+              <Text>{description}</Text>
+            </Box>
+            <Box>
+              <Flex>
+              <Text fontSize={'20px'} fontWeight='15px' display={'flex'} gap='10px' justifyContent={'center'}
+                alignItems='center'><span><RxDotFilled /></span>{language}</Text></Flex>
+            </Box>
+          </Grid>
+       </Box>
+    </a>
+  );
+     
+}

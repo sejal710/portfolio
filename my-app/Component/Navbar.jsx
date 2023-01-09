@@ -1,48 +1,32 @@
-import React, { useState } from 'react'
-// import { ReactNode } from 'react';
+import React from 'react'
 import {
   Box,
   Flex,
   Avatar,
-  Link,
   Button,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
   MenuDivider,
-  useDisclosure,
   useColorModeValue,
   Stack,
   useColorMode,
   Center,
 } from '@chakra-ui/react';
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
-
-// const NavLink = ({ children }) => (
-//   <Link
-//     px={2}
-//     py={1}
-//     rounded={'md'}
-//     _hover={{
-//       textDecoration: 'none',
-//       bg: useColorModeValue('gray.200', 'gray.700'),
-//     }}
-//     href={'#'}>
-//     {children}
-//   </Link>
-// );
+import Link from 'next/link'
 
 export default function Navbar() {
     const { colorMode, toggleColorMode } = useColorMode();
-//   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4}>
+      <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} >
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-           <Flex gap='9px'><Box>Sejal Jaiswal</Box>
-           <Box>Experience</Box>
-           <Box>Project</Box></Flex>
+           <Flex gap='9px'>
+           <Box><Link href='/'> Sejal Jaiswal</Link></Box>
+           <Box><Link href='/Exprience' >Experience</Link></Box>
+           <Box><Link href='Project'>Project</Link></Box></Flex>
 
          <Flex alignItems={'center'}>
             <Stack direction={'row'} spacing={7}>
@@ -67,17 +51,18 @@ export default function Navbar() {
                   <Center>
                     <Avatar
                       size={'2xl'}
-                      src={'https://avatars.dicebear.com/api/male/username.svg'}
+                      src={'https://avatars.githubusercontent.com/u/108399174?v=4'}
                     />
                   </Center>
                   <br />
                   <Center>
-                    <p>Username</p>
+                    <p>Sejal Jaiswal</p>
                   </Center>
                   <br />
                   <MenuDivider />
-                  <MenuItem>Project</MenuItem>
-                  <MenuItem>Exprience</MenuItem>
+                  {/* <Link href='/Project'></Link> */}
+                  <MenuItem><Link href='Project'>Project</Link></MenuItem>
+                  <MenuItem><Link href='/Exprience' >Experience</Link></MenuItem>
                 </MenuList>
                </Menu> 
             </Stack>
